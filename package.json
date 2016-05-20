@@ -1,0 +1,35 @@
+{
+  "name": "pacific",
+  "version": "0.1.0",
+  "description": "Ceci n'est pas une pipe",
+  "main": "out/index.js",
+  "scripts": {
+    "build": "typings install && tsc",
+    "prepublish": "npm run build",
+    "pretest": "npm run build",
+    "test": "mocha out/**/*-spec.js --recursive",
+    "coverage": "istanbul cover _mocha -x *-spec.* -- out/**/*-spec.js"
+  },
+  "author": "Sam Rijs",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:srijs/node-pacific.git"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "chai-as-promised": "^5.2.0",
+    "coveralls": "^2.11.9",
+    "istanbul": "1.0.0-alpha.2",
+    "mocha": "^2.4.5",
+    "mocha-lcov-reporter": "^1.2.0",
+    "sinon": "^1.17.3",
+    "sinon-chai": "^2.8.0",
+    "typescript": "^1.8.7",
+    "typings": "^0.6.10"
+  },
+  "typings": "out/index.d.ts",
+  "bugs": {
+    "url": "https://github.com/srijs/node-pacific/issues"
+  }
+}
