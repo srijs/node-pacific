@@ -125,7 +125,7 @@ export class Source<Output> {
     });
   }
 
-  static fromInputStream<F>(input: () => NodeJS.ReadableStream): Source<Buffer> {
+  static fromInputStream(input: () => NodeJS.ReadableStream): Source<Buffer> {
     return fromInputStream(input);
   }
 }
