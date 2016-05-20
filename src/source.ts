@@ -89,9 +89,9 @@ export class Source<Output> {
     return this.statefulFilter(null, (state, output) => [state, pred(output)]);
   }
 
-  statefulFilter<S>(init: S, pred: (state: S, output: Output) => [S, boolean]): Source<Output> {
-    return new Source(<State, Result>(sink: SinkInterface<Output, State, Result>) => {
-      return this.pipe<[S, State], Result>({
+  statefulFilter<State>(init: State, pred: (state: State, output: Output) => [State, boolean]): Source<Output> {
+    return new Source(<SinkState, Result>(sink: SinkInterface<Output, SinkState, Result>) => {
+      return this.pipe<[State, SinkState], Result>({
         onStart: () => sink.onStart().then(state => [init, state]),
         onData: (state, output) => {
           const res = pred(state[0], output);

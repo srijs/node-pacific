@@ -43,7 +43,7 @@ export class IntoOutputStreamState {
   }
 }
 
-export function intoOutputStream<F>(output: () => NodeJS.WritableStream): Sink<Buffer, IntoOutputStreamState, void> {
+export function intoOutputStream(output: () => NodeJS.WritableStream): Sink<Buffer, IntoOutputStreamState, void> {
   return new Sink<Buffer, IntoOutputStreamState, void>({
     onStart: () => Promise.resolve(new IntoOutputStreamState(output())),
     onData: (state, buf) => state.write(buf),
