@@ -23,6 +23,14 @@ export class Sink<Input, State, Result> implements SinkInterface<Input, State, R
     return Sink.const(null);
   }
 
+  static fail<Input, State, Result>(reason: Error): Sink<Input, State, Result> {
+    return new Sink({
+      onStart: () => Promise.reject<State>(reason),
+      onData: () => Promise.reject<State>(reason),
+      onEnd: () => Promise.reject<Result>(reason)
+    });
+  }
+
   static const<Input, Result>(res: Result): Sink<Input, Result, Result> {
     return new Sink<Input, Result, Result>({
       onStart: () => Promise.resolve(res),

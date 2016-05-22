@@ -31,6 +31,26 @@ describe('Stream', () => {
 
     });
 
+    describe('fails', () => {
+
+      it('fails with an empty input', () => {
+        const reason = new Error('some error');
+        const sink = Sink.fail(reason);
+        const source = Source.empty();
+        const promise = source.pipe(sink);
+        return chai.expect(promise).to.eventually.be.rejectedWith(reason);
+      });
+
+      it('fails with a non-empty input', () => {
+        const reason = new Error('some error');
+        const sink = Sink.fail(reason);
+        const source = Source.fromArray([1, 2, 3]);
+        const promise = source.pipe(sink);
+        return chai.expect(promise).to.eventually.be.rejectedWith(reason);
+      });
+
+    });
+
     describe('const', () => {
 
       it('returns the result with an empty input', () => {
