@@ -45,6 +45,16 @@ describe('Stream', () => {
 
     });
 
+    describe('fail', () => {
+
+      it('throws an error', () => {
+        const reason = new Error('some error');
+        const src = Source.fail(reason);
+        return chai.expect(src.toArray()).to.eventually.be.rejectedWith(reason);
+      });
+
+    });
+
     describe('concat', () => {
 
       it('concatenates two empty sources', () => {

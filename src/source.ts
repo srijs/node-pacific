@@ -23,6 +23,12 @@ export class Source<Output> {
     });
   }
 
+  static fail<Output>(reason: Error): Source<Output> {
+    return new Source(<State, Result>(sink: SinkInterface<Output, State, Result>) => {
+      return Promise.reject<Result>(reason);
+    });
+  }
+
   concat(next: Source<Output>): Source<Output> {
     return this.concatAsync(Promise.resolve(next));
   }
