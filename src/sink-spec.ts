@@ -33,20 +33,22 @@ describe('Stream', () => {
 
     describe('fails', () => {
 
-      it('fails with an empty input', () => {
+      it('fails when calling onStart', () => {
         const reason = new Error('some error');
         const sink = Sink.fail(reason);
-        const source = Source.empty();
-        const promise = source.pipe(sink);
-        return chai.expect(promise).to.eventually.be.rejectedWith(reason);
+        return chai.expect(sink.onStart()).to.eventually.be.rejectedWith(reason);
       });
 
-      it('fails with a non-empty input', () => {
+      it('fails when calling onData', () => {
         const reason = new Error('some error');
         const sink = Sink.fail(reason);
-        const source = Source.fromArray([1, 2, 3]);
-        const promise = source.pipe(sink);
-        return chai.expect(promise).to.eventually.be.rejectedWith(reason);
+        return chai.expect(sink.onData({}, {})).to.eventually.be.rejectedWith(reason);
+      });
+
+      it('fails when calling onEnd', () => {
+        const reason = new Error('some error');
+        const sink = Sink.fail(reason);
+        return chai.expect(sink.onEnd({})).to.eventually.be.rejectedWith(reason);
       });
 
     });
