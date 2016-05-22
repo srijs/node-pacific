@@ -46,10 +46,10 @@ export class Source<Output> {
   }
 
   map<NewOutput>(f: (output: Output) => NewOutput): Source<NewOutput> {
-    return this.statefulMap(null, (state, output) => [state, f(output)]);
+    return this.mapWithState(null, (state, output) => [state, f(output)]);
   }
 
-  statefulMap<S, NewOutput>(init: S, f: (state: S, output: Output) => [S, NewOutput]): Source<NewOutput> {
+  mapWithState<S, NewOutput>(init: S, f: (state: S, output: Output) => [S, NewOutput]): Source<NewOutput> {
     return new Source(<State, Result>(sink: SinkInterface<NewOutput, State, Result>) => {
       return this.pipe<[S, State], Result>({
         onStart: () => sink.onStart().then(state => [init, state]),
@@ -87,10 +87,10 @@ export class Source<Output> {
   }
 
   filter(pred: (output: Output) => boolean): Source<Output> {
-    return this.statefulFilter(null, (state, output) => [state, pred(output)]);
+    return this.filterWithState(null, (state, output) => [state, pred(output)]);
   }
 
-  statefulFilter<State>(init: State, pred: (state: State, output: Output) => [State, boolean]): Source<Output> {
+  filterWithState<State>(init: State, pred: (state: State, output: Output) => [State, boolean]): Source<Output> {
     return new Source(<SinkState, Result>(sink: SinkInterface<Output, SinkState, Result>) => {
       return this.pipe<[State, SinkState], Result>({
         onStart: () => sink.onStart().then(state => [init, state]),
