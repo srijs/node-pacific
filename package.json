@@ -1,6 +1,6 @@
 {
   "name": "pacific",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Ceci n'est pas une pipe",
   "main": "out/index.js",
   "scripts": {
