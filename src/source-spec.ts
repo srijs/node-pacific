@@ -98,13 +98,13 @@ describe('Stream', () => {
     describe('map', () => {
 
       it('produces an empty source from an empty source', () => {
-        const src = Source.empty();
-        return chai.expect(src.map((x: number) => x + 1).toArray()).to.eventually.deep.equal([]);
+        const src = Source.empty<number>();
+        return chai.expect(src.map(x => x + 1).toArray()).to.eventually.deep.equal([]);
       });
 
       it('replaces each output with the result of the function', () => {
         const src = Source.fromArray([1,2,3]);
-        return chai.expect(src.map((x: number) => x + 1).toArray()).to.eventually.deep.equal([2,3,4]);
+        return chai.expect(src.map(x => x + 1).toArray()).to.eventually.deep.equal([2,3,4]);
       });
 
     });
@@ -112,13 +112,13 @@ describe('Stream', () => {
     describe('effectfulMap', () => {
 
       it('produces an empty source from an empty source', () => {
-        const src = Source.empty();
-        return chai.expect(src.mapAsync((x: number) => Promise.resolve(x + 1)).toArray()).to.eventually.deep.equal([]);
+        const src = Source.empty<number>();
+        return chai.expect(src.mapAsync(x => Promise.resolve(x + 1)).toArray()).to.eventually.deep.equal([]);
       });
 
       it('replaces each output with the result of the function', () => {
         const src = Source.fromArray([1,2,3]);
-        return chai.expect(src.mapAsync((x: number) => Promise.resolve(x + 1)).toArray()).to.eventually.deep.equal([2,3,4]);
+        return chai.expect(src.mapAsync(x => Promise.resolve(x + 1)).toArray()).to.eventually.deep.equal([2,3,4]);
       });
 
     });
