@@ -1,6 +1,6 @@
-import {Sink} from '../sink';
+import {Source} from '../source';
 
-export class IntoOutputStreamState {
+class IntoOutputStreamState {
   private _hasError = false;
   private _err: Error;
 
@@ -43,9 +43,10 @@ export class IntoOutputStreamState {
   }
 }
 
-export function intoOutputStream(output: () => NodeJS.WritableStream): Sink<Buffer, IntoOutputStreamState, void> {
-  return new Sink<Buffer, IntoOutputStreamState, void>({
-    onStart: () => Promise.resolve(new IntoOutputStreamState(output())),
+export function intoOutputStream(source: Source<Buffer>, output: NodeJS.WritableStream): Promise<void> {
+  const init = new IntoOutputStreamState(output);
+  return source.pipe({
+    onStart: () => Promise.resolve(init),
     onData: (state, buf) => state.write(buf),
     onEnd: (state) => state.end()
   });

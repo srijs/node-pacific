@@ -1,5 +1,6 @@
 import {Sink, SinkInterface} from './sink';
 import {fromInputStream} from './compat/input';
+import {intoOutputStream} from './compat/output';
 
 export class Source<Output> {
   constructor(private _pipe: <State, Result>(sink: SinkInterface<Output, State, Result>) => Promise<Result>) {}
@@ -107,6 +108,10 @@ export class Source<Output> {
 
   toArray(): Promise<Array<Output>> {
     return this.pipe(Sink.fold([], (arr, outp) => arr.concat([outp])));
+  }
+
+  intoOutputStream(f: (output: Output) => Buffer, output: NodeJS.WritableStream): Promise<void> {
+    return intoOutputStream(this.map(f), output);
   }
 
   static fromArray<Output>(arr: Array<Output>): Source<Output> {

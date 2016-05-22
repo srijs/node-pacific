@@ -1,5 +1,3 @@
-import {IntoOutputStreamState, intoOutputStream} from './compat/output';
-
 export interface SinkInterface<Input, State, Result> {
   onStart: () => Promise<State>;
   onData: (s: State, i: Input) => Promise<State>;
@@ -68,9 +66,5 @@ export class Sink<Input, State, Result> implements SinkInterface<Input, State, R
       onData: (s, i) => Promise.all([this.onData(s[0], i), other.onData(s[1], i)]),
       onEnd: (s) => Promise.all([this.onEnd(s[0]), other.onEnd(s[1])])
     });
-  }
-
-  static intoOutputStream(output: () => NodeJS.WritableStream): Sink<Buffer, IntoOutputStreamState, void> {
-    return intoOutputStream(output);
   }
 }
