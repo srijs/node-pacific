@@ -67,6 +67,34 @@ describe('Stream', () => {
 
     });
 
+    describe('fold', () => {
+
+      it('produces the init result from an empty source', () => {
+        const src = Source.empty<number>();
+        return chai.expect(src.fold(42, (x, y) => x + y)).to.eventually.equal(42);
+      });
+
+      it('replaces each output with the result of the function', () => {
+        const src = Source.fromArray([1,2,3]);
+        return chai.expect(src.fold(42, (x, y) => x + y)).to.eventually.deep.equal(48);
+      });
+
+    });
+
+    describe('foldAsync', () => {
+
+      it('produces the init result from an empty source', () => {
+        const src = Source.empty<number>();
+        return chai.expect(src.foldAsync(42, (x, y) => Promise.resolve(x + y))).to.eventually.equal(42);
+      });
+
+      it('replaces each output with the result of the function', () => {
+        const src = Source.fromArray([1,2,3]);
+        return chai.expect(src.foldAsync(42, (x, y) => Promise.resolve(x + y))).to.eventually.deep.equal(48);
+      });
+
+    });
+
     describe('map', () => {
 
       it('produces an empty source from an empty source', () => {

@@ -45,6 +45,14 @@ export class Source<Output> {
     });
   }
 
+  fold<State>(init: State, accum: (state: State, output: Output) => State): Promise<State> {
+    return this.pipe(Sink.fold(init, accum));
+  }
+
+  foldAsync<State>(init: State, accum: (state: State, output: Output) => Promise<State>): Promise<State> {
+    return this.pipe(Sink.foldAsync(init, accum));
+  }
+
   map<NewOutput>(f: (output: Output) => NewOutput): Source<NewOutput> {
     return this.mapWithState(null, (state, output) => [state, f(output)]);
   }
@@ -107,7 +115,7 @@ export class Source<Output> {
   }
 
   toArray(): Promise<Array<Output>> {
-    return this.pipe(Sink.fold([], (arr, outp) => arr.concat([outp])));
+    return this.fold([], (arr, outp) => arr.concat([outp]));
   }
 
   intoOutputStream(f: (output: Output) => Buffer, output: NodeJS.WritableStream): Promise<void> {

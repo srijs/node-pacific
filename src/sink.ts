@@ -35,9 +35,16 @@ export class Sink<Input, State, Result> implements SinkInterface<Input, State, R
     init: State,
     accum: (state: State, input: Input) => State
   ): Sink<Input, State, State> {
+    return Sink.foldAsync(init, (state: State, input: Input) => Promise.resolve(accum(state, input)));
+  }
+
+  static foldAsync<Input, State>(
+    init: State,
+    accum: (state: State, input: Input) => Promise<State>
+  ): Sink<Input, State, State> {
     return new Sink({
       onStart: () => Promise.resolve(init),
-      onData: (state: State, input: Input) => Promise.resolve(accum(state, input)),
+      onData: accum,
       onEnd: (state: State) => Promise.resolve(state)
     });
   }
