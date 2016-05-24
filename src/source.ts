@@ -120,6 +120,21 @@ export class Source<Output> {
     });
   }
 
+  filterAsync(pred: (output: Output) => Promise<boolean>): Source<Output> {
+    return new Source(<State, Result>(sink: SinkInterface<Output, State, Result>) => {
+      return this.pipe<State, Result>({
+        onStart: () => sink.onStart(),
+        onData: (state, output) => pred(output).then(res => {
+          if (!res) {
+            return Promise.resolve(state);
+          }
+          return sink.onData(state, output);
+        }),
+        onEnd: (state) => sink.onEnd(state)
+      });
+    });
+  }
+
   toArray(): Promise<Array<Output>> {
     return this.fold([], (arr, outp) => arr.concat([outp]));
   }

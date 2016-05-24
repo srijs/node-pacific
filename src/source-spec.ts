@@ -161,6 +161,20 @@ describe('Stream', () => {
 
     });
 
+    describe('filterAsync', () => {
+
+      it('produces an empty source from an empty source', () => {
+        const src = Source.empty();
+        return chai.expect(src.filterAsync(() => Promise.resolve(true)).toArray()).to.eventually.deep.equal([]);
+      });
+
+      it('only produces elements for which the predicate returns true', () => {
+        const src = Source.fromArray([1,2,3,4,5,6]);
+        return chai.expect(src.filterAsync(x => Promise.resolve(x % 2 === 0)).toArray()).to.eventually.deep.equal([2,4,6]);
+      });
+
+    });
+
     describe('intoOutputStream', () => {
 
       it('writes no data when the source is empty', () => {
