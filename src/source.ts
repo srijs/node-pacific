@@ -30,16 +30,16 @@ export class Source<Output> {
   }
 
   concat(next: Source<Output>): Source<Output> {
-    return this.concatAsync(Promise.resolve(next));
+    return this.concatAsync(() => Promise.resolve(next));
   }
 
-  concatAsync(f: Promise<Source<Output>>): Source<Output> {
+  concatAsync(f: () => Promise<Source<Output>>): Source<Output> {
     return new Source(<State, Result>(sink: SinkInterface<Output, State, Result>) => {
       return this.pipe({
         onStart: () => sink.onStart(),
         onData: (state: State, output: Output) => sink.onData(state, output),
         onEnd: (intermediateState: State) => {
-          return f.then((next) => {
+          return f().then((next) => {
             return next.pipe({
               onStart: () => Promise.resolve<State>(intermediateState),
               onData: (state: State, output: Output) => sink.onData(state, output),
